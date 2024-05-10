@@ -60,7 +60,12 @@ func getAPIContent[T any](url string, model T) T {
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	body := getRequestBody(req, err)
 
-	err = json.Unmarshal(body, &model)
+	return convertJsonContentToModel(body, model)
+}
+
+func convertJsonContentToModel[T any](body []byte, model T) T {
+	err := json.Unmarshal(body, &model)
+
 	if err != nil {
 		log.Println("Error parsing JSON data")
 		panic(err)
